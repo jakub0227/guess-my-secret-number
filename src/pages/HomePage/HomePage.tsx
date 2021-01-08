@@ -12,6 +12,7 @@ export const HomePage: Route = () => {
           display: flex;
           flex-direction: column;
           justify-content: space-evenly;
+		
 		`,
 		startButton: css`
           margin: ${theme.spacing(10)}px;
@@ -26,11 +27,12 @@ export const HomePage: Route = () => {
 			<Box>
 				<Zoom in timeout={1000}>
 					<Typography variant='h3'>
-						Welcome to "Guess the number" game
+						Welcome to My Secret Number game
 					</Typography>
 				</Zoom>
 				<Zoom in timeout={1000}>
 					<Button css={styles.startButton}
+					        color='inherit'
 					        variant='contained'
 					        component={Link}
 					        to='/game'>
