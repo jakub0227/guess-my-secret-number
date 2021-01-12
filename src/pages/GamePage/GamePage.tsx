@@ -1,22 +1,13 @@
-import React, {useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Route} from '../../types/Route'
 import {Button, Card, Fade, Grid, Icon, Input, lighten, Slider, Typography} from '@material-ui/core'
 import {useSnackbar} from 'notistack'
 import useTheme from '@material-ui/core/styles/useTheme'
 import {css} from '@emotion/react'
 import {Link} from 'react-router-dom'
-
-// @ts-ignore
-import errorSound from '../../assets/Sounds/errorSound.wav'
-// @ts-ignore
-import celebration from '../../assets/Sounds/celebration.wav'
-// @ts-ignore
-import notificationBeep from '../../assets/Sounds/notificationBeep.wav'
-// @ts-ignore
-import gameOverBad from '../../assets/Sounds/gameOverBad.wav'
-
-let guessTheNumber: number = Math.floor(Math.random() * 100)
-console.log(guessTheNumber)
+import {badClick, endGame, gameOverWentBad, playSound} from '../../assets/Sounds/UiSound'
+import {WinContext} from '../../App'
+import {v4} from 'uuid'
 
 export const GamePage: Route = () => {
 	//STYLING
@@ -55,24 +46,33 @@ export const GamePage: Route = () => {
 		`,
 	}
 	
-	const badClick = new Audio(errorSound)
-	const endGame = new Audio(celebration)
-	const gameOverWentBad = new Audio(gameOverBad)
-	const playSound = (audioFile: any) => {
-		audioFile.play()
-	}
-	
 	//LOGIC
-	const [value, setValue] = useState<number | string | Array<number | string>>(0)
+	const [value, setValue] = useState<number>(0)
 	const [attempts, setAttempts] = useState<number>(0)
 	const [gameOver, setGameOver] = useState(false)
 	const {enqueueSnackbar} = useSnackbar()
+	const {setWins} = useContext(WinContext)
+	
+	const [guessTheNumber, setGuessTheNumber] = useState<number>(5)
+	
+	useEffect(() => {
+		setWins(wins => [...wins, {
+			date: new Date().toString(),
+			attempts: attempts,
+			guessNumber: guessTheNumber,
+			id: v4(),
+		}])
+		
+		setGuessTheNumber(Math.floor(Math.random() * 100))
+	}, [gameOver])
 	
 	const handleSliderChange = (event: any, newValue: number | number[]) => {
-		setValue(newValue)
+		if (!Array.isArray(newValue)) setValue(newValue)
 	}
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setValue(event.target.value === '' ? '' : Number(event.target.value))
+		if (event.target.value) {
+			setValue(+event.target.value)
+		}
 	}
 	const handleBlur = () => {
 		if (value < 0) {
@@ -83,7 +83,7 @@ export const GamePage: Route = () => {
 	}
 
 // EASY_MODE = max 15 attempts
-// MEDIUM = max 10 attempts
+// MEDIUM = max 10 attempts - now the limit is for MEDIUM
 // HARD = max 5 attempts
 	
 	const handleGameFunction = () => {
@@ -93,6 +93,7 @@ export const GamePage: Route = () => {
 			})
 			setAttempts(attempts + 1)
 			setGameOver(true)
+			
 			playSound(endGame)
 		} else if (value === guessTheNumber && attempts >= 1) {
 			enqueueSnackbar('What a successful guess!', {
@@ -112,7 +113,6 @@ export const GamePage: Route = () => {
 		if (value < guessTheNumber) {
 			enqueueSnackbar('Too Low, guess again!', {
 				variant: 'warning',
-				
 			})
 			setAttempts(attempts + 1)
 			playSound(badClick)

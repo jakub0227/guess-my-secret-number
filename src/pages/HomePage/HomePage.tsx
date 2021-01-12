@@ -4,6 +4,7 @@ import {Box, Button, Container, lighten, Typography, Zoom} from '@material-ui/co
 import useTheme from '@material-ui/core/styles/useTheme'
 import {css} from '@emotion/react'
 import {Link} from 'react-router-dom'
+import {playSound, startGameSound} from '../../assets/Sounds/UiSound'
 
 export const HomePage: Route = () => {
 	const theme = useTheme()
@@ -26,8 +27,18 @@ export const HomePage: Route = () => {
 		<Container css={styles.root}>
 			<Box>
 				<Zoom in timeout={1000}>
+					<Typography variant='h4'>
+						Welcome to
+					</Typography>
+				</Zoom>
+				<Zoom in timeout={1000}>
 					<Typography variant='h3'>
-						Welcome to My Secret Number game
+						My Secret Number
+					</Typography>
+				</Zoom>
+				<Zoom in timeout={1000}>
+					<Typography variant='h4'>
+						Game
 					</Typography>
 				</Zoom>
 				<Zoom in timeout={1000}>
@@ -35,7 +46,8 @@ export const HomePage: Route = () => {
 					        color='inherit'
 					        variant='contained'
 					        component={Link}
-					        to='/game'>
+					        to='/game'
+					        onClick={() => playSound(startGameSound)}>
 						Start
 					</Button>
 				</Zoom>

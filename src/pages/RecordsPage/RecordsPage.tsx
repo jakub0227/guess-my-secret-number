@@ -1,13 +1,28 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Route} from '../../types/Route'
-import {Typography} from '@material-ui/core'
+import {Card, CardContent, CardHeader, Paper, Typography} from '@material-ui/core'
+import {WinContext} from '../../App'
 
-export const RecordsPage: Route = () => {
+export const RecordsPage: Route = (props) => {
+	const {wins} = useContext(WinContext)
+	
 	return (
 		<div>
-			<Typography>
-				Here we will check our record...
-			</Typography>
+			<Paper>
+				<Typography>
+					Here we will check our record...
+				</Typography>
+			</Paper>
+			{wins.map(win => (
+				
+				<Card>
+					<CardContent>Id: {win.id}</CardContent>
+					<CardContent>Date: {win.date}</CardContent>
+					<CardContent>Guess number: {win.guessNumber}</CardContent>
+					<CardContent>Attempts: {win.attempts}</CardContent>
+				</Card>
+			
+			))}
 		</div>
 	)
 }

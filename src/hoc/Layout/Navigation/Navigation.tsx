@@ -25,8 +25,8 @@ export const Navigation: FC = () => {
 	const [drawerOpen, setDrawerOpen] = useState(false)
 	
 	return (
-		<AppBar css={styles.root} position='static' color='primary'>
-			<Toolbar css={styles.toolBar}>
+		<AppBar css={styles.root} position='static' color='transparent'>
+			<Toolbar css={styles.toolBar} variant='dense'>
 				<Hidden smUp>
 					<MobileMenu open={drawerOpen} onClose={() => setDrawerOpen(false)}/>
 					<IconButton css={styles.menuButton} onClick={() => setDrawerOpen(true)}>
