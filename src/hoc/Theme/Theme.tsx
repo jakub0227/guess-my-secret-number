@@ -18,6 +18,11 @@ export const Theme: FC = (props) => {
 		<ThemeProvider
 			theme={createMuiTheme({
 				palette: {
+					text: {
+						primary: '#ffffff',
+						secondary: '#000000',
+						
+					},
 					type: 'dark',
 					primary: {
 						light: '#b085f5',

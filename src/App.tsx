@@ -5,6 +5,7 @@ import {Layout} from './hoc/Layout/Layout'
 import {routeList} from './hoc/Layout/Navigation/NavigationItems/routeList'
 import {SnackbarProvider} from 'notistack'
 import {Theme} from './hoc/Theme/Theme'
+import {v4} from 'uuid'
 
 export interface Win {
 	date: string,
@@ -25,7 +26,7 @@ export const App: FC = (props) => {
 		date: new Date().toString(),
 		attempts: 5,
 		guessNumber: 5,
-		id: 'ahsgvdfawb222',
+		id: v4(),
 	}])
 	
 	return (

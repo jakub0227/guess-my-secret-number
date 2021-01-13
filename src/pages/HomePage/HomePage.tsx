@@ -13,7 +13,6 @@ export const HomePage: Route = () => {
           display: flex;
           flex-direction: column;
           justify-content: space-evenly;
-		
 		`,
 		startButton: css`
           margin: ${theme.spacing(10)}px;
