@@ -1,8 +1,9 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {Route} from '../../types/Route'
 import {Card, CardContent, lighten, Typography, useTheme} from '@material-ui/core'
-import {WinContext} from '../../App'
 import {css} from '@emotion/react'
+import {useSelector} from 'react-redux'
+import {State} from '../../redux/reducers/reducer'
 
 export const RecordsPage: Route = () => {
 	const theme = useTheme()
@@ -30,11 +31,11 @@ export const RecordsPage: Route = () => {
           padding: ${theme.spacing(3)}px;
           text-align: left;
           opacity: 90%;
-		
 		`,
 	}
 	
-	const {wins} = useContext(WinContext)
+	const records: State = useSelector((state: State) => state)
+	console.log(records)
 	
 	return (
 		<div>
@@ -42,20 +43,20 @@ export const RecordsPage: Route = () => {
 				<Typography variant='h5'>
 					Score Board:
 				</Typography>
-				{wins.map(win => (
-					<Card css={styles.scoreCard}>
+				{records.map(record => (
+					<Card key={record.id} css={styles.scoreCard}>
 						<CardContent css={styles.cardContent}>
 							<Typography>
-								Id: {win.id}
+								Id: {record.id}
 							</Typography>
 							<Typography>
-								Date: {win.date}
+								Date: {record.date}
 							</Typography>
 							<Typography>
-								Guess number: {win.guessNumber}
+								Guess number: {record.guessNumber}
 							</Typography>
 							<Typography>
-								Attempts: {win.attempts}
+								Attempts: {record.attempts}
 							</Typography>
 						</CardContent>
 					</Card>

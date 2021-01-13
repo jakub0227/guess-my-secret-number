@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Route} from '../../types/Route'
 import {Button, Card, Fade, Grid, Icon, Input, lighten, Slider, Typography} from '@material-ui/core'
 import {useSnackbar} from 'notistack'
@@ -6,7 +6,8 @@ import useTheme from '@material-ui/core/styles/useTheme'
 import {css} from '@emotion/react'
 import {Link} from 'react-router-dom'
 import {badClick, endGame, gameOverWentBad, playSound} from '../../assets/Sounds/UiSound'
-import {WinContext} from '../../App'
+import {useDispatch} from 'react-redux'
+import {addRecord} from '../../redux/actions/actions'
 import {v4} from 'uuid'
 
 export const GamePage: Route = () => {
@@ -47,23 +48,20 @@ export const GamePage: Route = () => {
 	}
 	
 	//LOGIC
+	const dispatch = useDispatch()
 	const [value, setValue] = useState<number>(0)
-	const [attempts, setAttempts] = useState<number>(0)
+	const [attempts, setAttempts] = useState<number>(1)
 	const [gameOver, setGameOver] = useState(false)
 	const {enqueueSnackbar} = useSnackbar()
-	const {setWins} = useContext(WinContext)
 	
 	const [guessTheNumber, setGuessTheNumber] = useState<number>(5)
+	const id = v4()
+	const date = new Date().toString()
 	
 	useEffect(() => {
-		setWins(wins => [...wins, {
-			date: new Date().toString(),
-			attempts: attempts,
-			guessNumber: guessTheNumber,
-			id: v4(),
-		}])
 		
 		setGuessTheNumber(Math.floor(Math.random() * 100))
+		
 	}, [gameOver])
 	
 	const handleSliderChange = (event: any, newValue: number | number[]) => {
@@ -87,20 +85,21 @@ export const GamePage: Route = () => {
 // HARD = max 5 attempts
 	
 	const handleGameFunction = () => {
-		if (value === guessTheNumber && attempts === 0) {
+		if (value === guessTheNumber && attempts === 1) {
 			enqueueSnackbar('Like a Boss! Great!', {
 				variant: 'success',
 			})
 			setAttempts(attempts + 1)
 			setGameOver(true)
-			
+			dispatch(addRecord(id, date, attempts, guessTheNumber))
 			playSound(endGame)
-		} else if (value === guessTheNumber && attempts >= 1) {
+		} else if (value === guessTheNumber && attempts > 1) {
 			enqueueSnackbar('What a successful guess!', {
 				variant: 'success',
 			})
 			setAttempts(attempts + 1)
 			setGameOver(true)
+			dispatch(addRecord(id, date, attempts, guessTheNumber))
 			playSound(endGame)
 		}
 		if (value > guessTheNumber) {
@@ -117,7 +116,7 @@ export const GamePage: Route = () => {
 			setAttempts(attempts + 1)
 			playSound(badClick)
 		}
-		if (value !== guessTheNumber && attempts >= 9) {
+		if (value !== guessTheNumber && attempts >= 10) {
 			enqueueSnackbar('You have lost the game!', {
 				variant: 'error',
 			})
@@ -127,8 +126,9 @@ export const GamePage: Route = () => {
 	}
 	
 	const handleClick = (e: React.ChangeEvent<{}>) => {
-		handleGameFunction()
 		e.preventDefault()
+		handleGameFunction()
+		
 	}
 	
 	const handleResetGame = () => {
@@ -141,7 +141,7 @@ export const GamePage: Route = () => {
 				<Fade in timeout={1000}>
 					<Card elevation={5} css={styles.root}>
 						<Typography variant='h5'>
-							Try to find my number...
+							Try to find my number... {guessTheNumber}
 						</Typography>
 						<Grid css={styles.gameControl} container spacing={2} alignItems='center'>
 							<Grid item>
@@ -149,7 +149,7 @@ export const GamePage: Route = () => {
 							</Grid>
 							<Grid item xs>
 								<Slider
-									value={typeof value === 'number' ? value : 0}
+									value={value}
 									onChange={handleSliderChange}
 								/>
 							</Grid>
@@ -177,7 +177,7 @@ export const GamePage: Route = () => {
 							Guess
 						</Button>
 						<Typography variant='h6'>
-							Try nr: {attempts}
+							Attempt {attempts - 1}
 						</Typography>
 					</Card>
 				</Fade>
@@ -190,7 +190,7 @@ export const GamePage: Route = () => {
 						<Grid css={styles.gameControl} container spacing={2} alignItems='center'>
 							<Grid item xs>
 								<Typography variant='h6'>
-									Attempts: {attempts} / 10
+									Attempts: {attempts - 1} / 10
 								</Typography>
 							</Grid>
 							<Grid item xs>
