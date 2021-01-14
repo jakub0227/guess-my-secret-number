@@ -9,7 +9,7 @@ import {initRecords} from './redux/actions/actions'
 import {useDispatch, useSelector} from 'react-redux'
 import {State} from './redux/reducers/reducer'
 
-export const App: FC = (props) => {
+export const App: FC = () => {
 	
 	const dispatch = useDispatch()
 	const records: State = useSelector((state: State) => state)

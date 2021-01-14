@@ -2,7 +2,7 @@ import {v4} from 'uuid'
 import * as actionTypes from '../actions/actionTypes'
 import {ADD_RECORD, INIT_RECORDS} from '../actions/actionTypes'
 import {Reducer} from 'redux'
-import {createReducer, PayloadAction} from '@reduxjs/toolkit'
+import {PayloadAction} from '@reduxjs/toolkit'
 
 interface Record {
 	date: string,
