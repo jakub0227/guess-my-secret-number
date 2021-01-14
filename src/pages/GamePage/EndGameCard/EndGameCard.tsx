@@ -1,8 +1,9 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import {Button, Card, Fade, Grid, lighten, Typography} from '@material-ui/core'
 import {Link} from 'react-router-dom'
 import useTheme from '@material-ui/core/styles/useTheme'
 import {css} from '@emotion/react'
+import {EndGameDialog} from './EndGameDialog/EndGameDialog'
 
 type EndGameCardProps = {
 	attempts: number;
@@ -36,19 +37,19 @@ export const EndGameCard: FC<EndGameCardProps> = (props) => {
           margin-top: ${theme.spacing(1)}px
 		`,
 	}
+	const [dialogOpen, setDialogOpen] = useState(false)
+	const handleDialogOpen = () => {
+		setDialogOpen(true)
+	}
+	
 	return (
 		
 		<Fade in timeout={1000}>
 			<Card elevation={5} css={styles.root}>
-				<Typography variant='h6'>
+				<Typography variant='h5'>
 					Game Over!
 				</Typography>
-				<Grid css={styles.gameControl} container spacing={2} alignItems='center'>
-					<Grid item xs>
-						<Typography variant='h6'>
-							Attempts: {props.attempts - 1} / 10
-						</Typography>
-					</Grid>
+				<Grid css={styles.gameControl} container spacing={4} alignItems='center'>
 					<Grid item xs>
 						<Button variant='outlined'
 						        component={Link}
@@ -57,7 +58,17 @@ export const EndGameCard: FC<EndGameCardProps> = (props) => {
 							Try Again?
 						</Button>
 					</Grid>
+					<Grid item xs>
+						<Button onClick={handleDialogOpen} variant='outlined'
+						>
+							Settings
+						</Button>
+						{dialogOpen && <EndGameDialog/>}
+					</Grid>
 				</Grid>
+				<Typography variant='h5'>
+					Attempts: {props.attempts - 1} / 10
+				</Typography>
 			</Card>
 		</Fade>
 	

@@ -99,14 +99,17 @@ export const GamePage: Route = () => {
 		<div>
 			{!gameOver ? (
 				<GameControlPanel attempts={attempts}
-				                  value={value}
 				                  blurEffect={handleBlur}
 				                  checkGuess={handleClick}
 				                  guessNumber={guessTheNumber}
 				                  inputChange={handleInputChange}
-				                  sliderChange={handleSliderChange}/>
+				                  sliderChange={handleSliderChange}
+				                  value={value}
+				/>
 			) : (
-				<EndGameCard attempts={attempts} resetAction={handleResetGame}/>
+				<EndGameCard attempts={attempts}
+				             resetAction={handleResetGame}
+				/>
 			)}
 		</div>
 	)

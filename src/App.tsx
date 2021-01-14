@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
-import {StylesProvider, Typography} from '@material-ui/core'
+import {Icon, StylesProvider, Typography} from '@material-ui/core'
 import {Layout} from './hoc/Layout/Layout'
 import {routeList} from './hoc/Layout/Navigation/NavigationItems/routeList'
 import {SnackbarProvider} from 'notistack'
@@ -28,7 +28,18 @@ export const App: FC = () => {
 		<BrowserRouter>
 			<StylesProvider injectFirst>
 				<SnackbarProvider autoHideDuration={2500}
-				                  maxSnack={3}>
+				                  maxSnack={3}
+				                  anchorOrigin={{
+					                  vertical: 'bottom',
+					                  horizontal: 'left',
+				                  }}
+				                  iconVariant={{
+					                  success: <Icon>sentiment_very_satisfied</Icon>,
+					                  error: <Icon>sentiment_very_dissatisfied</Icon>,
+					                  warning: <Icon>sentiment_dissatisfied</Icon>,
+					                  info: <Icon>info</Icon>,
+				                  }}
+				>
 					<Theme>
 						<Layout>
 							<Switch>

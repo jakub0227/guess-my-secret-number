@@ -5,12 +5,12 @@ import {css} from '@emotion/react'
 
 type GameControlPanelProps = {
 	attempts: number;
-	guessNumber: number;
-	value: number;
-	sliderChange: (event: any, newValue: number | number[]) => void;
-	inputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	checkGuess: (e: React.ChangeEvent<{}>) => void;
 	blurEffect: () => void
+	checkGuess: (e: React.ChangeEvent<{}>) => void;
+	guessNumber: number;
+	inputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	sliderChange: (event: any, newValue: number | number[]) => void;
+	value: number;
 }
 
 export const GameControlPanel: FC<GameControlPanelProps> = (props) => {
@@ -22,17 +22,19 @@ export const GameControlPanel: FC<GameControlPanelProps> = (props) => {
           ${theme.customMixins.flexCentered};
           padding: ${theme.spacing(5)}px;
           border-radius: 30px;
-          background: linear-gradient(135deg, ${theme.palette.primary.main}, ${lighten(theme.palette.secondary.dark, 0.5)} 80%);
+          background: linear-gradient(135deg, ${lighten(theme.palette.primary.main, 0.1)}, ${lighten(theme.palette.secondary.dark, 0.5)} 80%);
           height: 450px;
           width: 450px;
           max-height: 80vh;
           max-width: 80vh;
-          box-shadow: 0 8px 40px -12px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
           transition: 0.3s;
           z-index: 100;
 
           :hover {
-            box-shadow: 0 16px 70px -12.125px rgba(0, 0, 0, 0.3)
+            box-shadow: 0 16px 70px -12.125px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4.0px);
+            -webkit-backdrop-filter: blur(4.0px);
           }
 		`,
 		gameControl: css`
@@ -50,7 +52,7 @@ export const GameControlPanel: FC<GameControlPanelProps> = (props) => {
 	
 	return (
 		<Fade in timeout={1000}>
-			<Card elevation={5} css={styles.root}>
+			<Card elevation={6} css={styles.root}>
 				<Typography variant='h5'>
 					Try to find my number... {props.guessNumber}
 				</Typography>
