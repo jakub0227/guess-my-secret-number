@@ -15,15 +15,30 @@ export const GamePage: Route = () => {
 	const [value, setValue] = useState<number>(0)
 	const [attempts, setAttempts] = useState<number>(1)
 	const [gameOver, setGameOver] = useState(false)
+	const [maxAttempts, setMaxAttempts] = useState(10)
 	const {enqueueSnackbar} = useSnackbar()
 	const [guessTheNumber, setGuessTheNumber] = useState<number>(5)
 	const id = v4()
 	const date = new Date().toString()
 	
+	const difficulty = localStorage.Difficulty
+	console.log(difficulty)
+	
+	const handleDifficultyLevel = () => {
+		if (difficulty === 'easy') {
+			setMaxAttempts(15)
+		}
+		if (difficulty === 'medium') {
+			setMaxAttempts(10)
+		}
+		if (difficulty === 'hard') {
+			setMaxAttempts(5)
+		}
+	}
+	
 	useEffect(() => {
-		
 		setGuessTheNumber(Math.floor(Math.random() * 100))
-		
+		handleDifficultyLevel()
 	}, [gameOver])
 	
 	const handleSliderChange = (event: any, newValue: number | number[]) => {
@@ -41,9 +56,6 @@ export const GamePage: Route = () => {
 			setValue(100)
 		}
 	}
-// EASY_MODE = max 15 attempts
-// MEDIUM = max 10 attempts - now the limit is for MEDIUM
-// HARD = max 5 attempts
 	
 	const handleGameFunction = () => {
 		if (value === guessTheNumber && attempts === 1) {
@@ -77,7 +89,7 @@ export const GamePage: Route = () => {
 			setAttempts(attempts + 1)
 			playSound(badClick)
 		}
-		if (value !== guessTheNumber && attempts >= 10) {
+		if (value !== guessTheNumber && attempts >= maxAttempts) {
 			enqueueSnackbar('You have lost the game!', {
 				variant: 'error',
 			})

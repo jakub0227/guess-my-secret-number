@@ -5,7 +5,7 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogContentText,
-	DialogTitle, lighten, useMediaQuery, useTheme,
+	DialogTitle, lighten, Typography, useMediaQuery, useTheme,
 } from '@material-ui/core'
 import {Link} from 'react-router-dom'
 import {DifficultyDialog} from './DifficultyDialog/DifficultyDialog'
@@ -23,11 +23,10 @@ export const EndGameDialog: FC<EndQuizDialogProps> = (props) => {
           display: flex;
           flex-direction: column;
           align-items: center;
-		
 		`,
 		content: css`
-          ${theme.customMixins.flexCentered};
-          padding: ${theme.spacing(4)}px;
+          flex-direction: column;
+          padding: ${theme.spacing(5)}px;
 		`,
 		buttonWrap: css`
           ${theme.customMixins.flexCentered};
@@ -47,43 +46,52 @@ export const EndGameDialog: FC<EndQuizDialogProps> = (props) => {
 		setOpen(false)
 		setDifficultyOpen(true)
 	}
+	
 	return (
-		
 		<Dialog
 			css={styles.dialogRoot}
 			open={open}
 			fullScreen={fullScreen}
 			keepMounted
 		>
-			{/*{add here notistack reference about difficulty change successfully}*/}
 			<DialogTitle>
 				Dear user !
 			</DialogTitle>
 			<DialogContent css={styles.content}>
-				<DialogContentText color='textPrimary' variant='subtitle1'>
+				<DialogContentText color='textPrimary'
+				                   variant='h6'
+				>
 					Thank you for playing our game! From here you can check the High Scores or Change Difficulty by
-					increasing or decreasing attempts number. Check details below this text:
+					increasing or decreasing attempts number. Check details below this text:</DialogContentText>
+				<DialogContentText color='textSecondary'
+				>
+					<Typography component='p'>Easy Mode: 15 attempts</Typography>
+					<Typography component='p'>Medium Mode: 10 attempts</Typography>
+					<Typography component='p'>Hard Mode: 5 attempts</Typography>
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions css={styles.buttonWrap}>
-				<Button variant='contained' css={styles.buttons} color='primary' component={Link}
+				<Button variant='contained'
+				        css={styles.buttons}
+				        color='primary'
+				        component={Link}
 				        to='/records'
 				>
 					High Scores
 				</Button>
-				<Button variant='contained' css={styles.buttons}
+				<Button variant='contained'
+				        css={styles.buttons}
 				        onClick={handleDifficultyOpen}>
 					Difficulty Modes
 				</Button>
 			</DialogActions>
-			{difficultyOpen && <DifficultyDialog open={difficultyOpen} onClose={() => {
-				setDifficultyOpen(false)
-				setOpen(true)
-				enqueueSnackbar('New difficulty mode!', {
-					variant: 'info',
-				})
-			}}/>}
+			{difficultyOpen && <DifficultyDialog open={difficultyOpen} onClose={
+				() => {
+					setDifficultyOpen(false)
+					setOpen(true)
+					enqueueSnackbar('New difficulty saved', {variant: 'info'})
+				}
+			}/>}
 		</Dialog>
-	
 	)
 }
