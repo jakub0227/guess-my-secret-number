@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react'
 import {Route} from '../../types/Route'
 import {useSnackbar} from 'notistack'
 import {badClick, endGame, gameOverWentBad, playSound} from '../../assets/Sounds/UiSound'
-import {useDispatch} from 'react-redux'
-import {addRecord} from '../../redux/actions/actions'
+import {useDispatch, useSelector} from 'react-redux'
+import {addRecord} from '../../redux/record/recordActions'
 import {v4} from 'uuid'
 import {EndGameCard} from './EndGameCard/EndGameCard'
 import {GameControlPanel} from './GameControlPanel/GameControlPanel'
+import {userConfigSelector} from '../../redux/userConfig/userConfigSelectors'
 
 export const GamePage: Route = () => {
 	
@@ -15,31 +16,34 @@ export const GamePage: Route = () => {
 	const [value, setValue] = useState<number>(0)
 	const [attempts, setAttempts] = useState<number>(1)
 	const [gameOver, setGameOver] = useState(false)
-	const [maxAttempts, setMaxAttempts] = useState(10)
 	const {enqueueSnackbar} = useSnackbar()
 	const [guessTheNumber, setGuessTheNumber] = useState<number>(5)
 	const id = v4()
 	const date = new Date().toString()
 	
-	const difficulty = localStorage.Difficulty
-	console.log(difficulty)
+	const {difficulty} = useSelector(userConfigSelector)
 	
-	const handleDifficultyLevel = () => {
-		if (difficulty === 'easy') {
-			setMaxAttempts(15)
-		}
-		if (difficulty === 'medium') {
-			setMaxAttempts(10)
-		}
-		if (difficulty === 'hard') {
-			setMaxAttempts(5)
-		}
+	let maxAttempts: number
+	switch (difficulty) {
+		default:
+		case 'easy':
+			maxAttempts = 15
+			break
+		case 'medium':
+			maxAttempts = 10
+			break
+		case 'hard':
+			maxAttempts = 5
+			break
 	}
 	
 	useEffect(() => {
 		setGuessTheNumber(Math.floor(Math.random() * 100))
-		handleDifficultyLevel()
 	}, [gameOver])
+	
+	// useEffect(() => {
+	//
+	// }, [])
 	
 	const handleSliderChange = (event: any, newValue: number | number[]) => {
 		if (!Array.isArray(newValue)) setValue(newValue)
@@ -107,6 +111,9 @@ export const GamePage: Route = () => {
 		setGameOver(false)
 	}
 	
+	// przycisk settings + zeby sie nie przesuwalo po znikniciu
+	// naprawic localstorage (difficulty)
+	
 	return (
 		<div>
 			{!gameOver ? (
@@ -117,6 +124,7 @@ export const GamePage: Route = () => {
 				                  inputChange={handleInputChange}
 				                  sliderChange={handleSliderChange}
 				                  value={value}
+				                  maxAttempts={maxAttempts}
 				/>
 			) : (
 				<EndGameCard attempts={attempts}

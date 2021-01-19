@@ -1,5 +1,5 @@
-import * as actionTypes from '../actions/actionTypes'
-import {AddRecordAction, State} from '../reducers/reducer'
+import * as actionTypes from './recordActionTypes'
+import {AddRecordAction, RecordState} from './recordReducer'
 
 export const addRecord = (id: string, date: string, attempts: number, guessNumber: number): AddRecordAction => ({
 	type: actionTypes.ADD_RECORD,
@@ -11,7 +11,7 @@ export const addRecord = (id: string, date: string, attempts: number, guessNumbe
 	},
 })
 
-export const initRecords = (records: State) => ({
+export const initRecords = (records: RecordState) => ({
 	type: actionTypes.INIT_RECORDS,
 	payload: {
 		records,

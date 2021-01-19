@@ -1,0 +1,1 @@
+export const SET_DIFFICULTY = 'SET_DIFFICULTY'

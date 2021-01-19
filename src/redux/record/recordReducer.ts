@@ -1,6 +1,6 @@
 import {v4} from 'uuid'
-import * as actionTypes from '../actions/actionTypes'
-import {ADD_RECORD, INIT_RECORDS} from '../actions/actionTypes'
+import * as actionTypes from './recordActionTypes'
+import {ADD_RECORD, INIT_RECORDS} from './recordActionTypes'
 import {Reducer} from 'redux'
 import {PayloadAction} from '@reduxjs/toolkit'
 
@@ -11,9 +11,9 @@ interface Record {
 	id: string
 }
 
-export type State = Record[]
+export type RecordState = Record[]
 
-const initState: State = [
+const initState: RecordState = [
 	{
 		date: new Date().toString(),
 		attempts: 1,
@@ -29,11 +29,11 @@ const initState: State = [
 
 export type AddRecordAction = PayloadAction<Record, typeof ADD_RECORD>
 
-export type InitRecordsAction = PayloadAction<{ records: State }, typeof INIT_RECORDS>
+export type InitRecordsAction = PayloadAction<{ records: RecordState }, typeof INIT_RECORDS>
 
 type Actions = AddRecordAction | InitRecordsAction
 
-export const reducer: Reducer<State, Actions> = (state = initState, action) => {
+export const recordReducer: Reducer<RecordState, Actions> = (state = initState, action) => {
 	switch (action.type) {
 		case actionTypes.ADD_RECORD:
 			return [...state, {

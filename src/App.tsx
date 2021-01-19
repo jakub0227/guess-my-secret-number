@@ -1,27 +1,38 @@
 import React, {FC, useEffect} from 'react'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
-import {Icon, StylesProvider, Typography} from '@material-ui/core'
+import {Icon, StylesProvider} from '@material-ui/core'
 import {Layout} from './hoc/Layout/Layout'
 import {routeList} from './hoc/Layout/Navigation/NavigationItems/routeList'
 import {SnackbarProvider} from 'notistack'
 import {Theme} from './hoc/Theme/Theme'
-import {initRecords} from './redux/actions/actions'
+import {initRecords} from './redux/record/recordActions'
 import {useDispatch, useSelector} from 'react-redux'
-import {State} from './redux/reducers/reducer'
+import {recordsSelector} from './redux/record/recordSelectors'
+import {userConfigSelector} from './redux/userConfig/userConfigSelectors'
+import {setDifficulty} from './redux/userConfig/userConfigActions'
 
 export const App: FC = () => {
 	
 	const dispatch = useDispatch()
-	const records: State = useSelector((state: State) => state)
+	const records = useSelector(recordsSelector)
+	const {difficulty} = useSelector(userConfigSelector)
 	
 	useEffect(() => {
 		localStorage.records = JSON.stringify(records)
 	}, [records])
 	
 	useEffect(() => {
+		localStorage.difficulty = JSON.stringify(difficulty)
+	}, [difficulty])
+	
+	useEffect(() => {
 		if (localStorage.records) {
 			dispatch(initRecords(JSON.parse(localStorage.records)))
 		}
+		if (localStorage.difficulty) {
+			dispatch((setDifficulty(JSON.parse(localStorage.difficulty))))
+		}
+		
 	}, [])
 	
 	return (
@@ -47,11 +58,6 @@ export const App: FC = () => {
 									{routeList.map(route => (
 										<Route exact path={route.routeName} component={route}/>
 									))}
-								</Route>
-								<Route>
-									<Typography variant='h1'>
-										404 Page Not Found
-									</Typography>
 								</Route>
 							</Switch>
 						</Layout>

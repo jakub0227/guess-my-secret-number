@@ -3,7 +3,8 @@ import {Route} from '../../types/Route'
 import {Card, CardContent, lighten, Typography, useTheme} from '@material-ui/core'
 import {css} from '@emotion/react'
 import {useSelector} from 'react-redux'
-import {State} from '../../redux/reducers/reducer'
+import {RecordState} from '../../redux/record/recordReducer'
+import {recordsSelector} from '../../redux/record/recordSelectors'
 
 export const RecordsPage: Route = () => {
 	const theme = useTheme()
@@ -34,8 +35,7 @@ export const RecordsPage: Route = () => {
 		`,
 	}
 	
-	const records: State = useSelector((state: State) => state)
-	console.log(records)
+	const records: RecordState = useSelector(recordsSelector)
 	
 	return (
 		<div>
